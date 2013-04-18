@@ -31,7 +31,7 @@ public class Spider {
 	/**
 	 * Maximum number of urls that should be scraped.
 	 */
-	private int maxUrls = 100;
+	private int maxUrls;
 	
 	/**
 	 * URLs that have already been retrieved.
