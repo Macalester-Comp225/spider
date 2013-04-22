@@ -58,12 +58,16 @@ public class Spider {
 	public void crawl(String beginningUrl) {
 		work.add(beginningUrl);
 		
-		// TODO: While there is remaining work and we haven't
-		// reach the maximum # of finished urls, process
-		// the next unfinshed url.  After processing, mark
-		// it as finished.
-		// 
-		// The processing should happen in processPage().
+		while(finished.size() < maxUrls) {
+		    String url = work.poll();
+		    if(url == null)
+		        break;
+		    
+		    if(!finished.contains(url)) {
+		        processPage(url);
+		        finished.add(url);
+		    }
+		}
 	}
 	
 	/**
@@ -73,11 +77,15 @@ public class Spider {
 	 */
 	public void processPage(String url) {
 		String html = helper.retrieve(url);
+		if(html == null)
+		    return;
 		
-		// TODO: extract all the links from the url
-		// For each link that isn't an image, increment the
-		// count for the link and queue up the link for future scraping.
-		// HINT: Take a look at the helper class
+        for (String link : helper.extractLinks(url, html)) {
+            if (!helper.isImage(link)) {
+                urlCounter.countWord(link);
+                work.add(link);
+            }
+        }
 	}
 	
 	/**
